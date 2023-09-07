@@ -3,9 +3,8 @@ package main
 import (
 	"net/http"
 
-	_ "github.com/lib/pq"
-	"github.com/luksrocha/house-system/database"
 	"github.com/luksrocha/house-system/internal/application/repositories"
+	"github.com/luksrocha/house-system/internal/infra/database"
 	handlers "github.com/luksrocha/house-system/internal/infra/handlers/houseHandlers"
 )
 
