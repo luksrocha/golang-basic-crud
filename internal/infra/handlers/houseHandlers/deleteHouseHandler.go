@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/luksrocha/house-system/internal/application/repositories"
 	useCase "github.com/luksrocha/house-system/internal/application/useCases/houseUseCases"
+	"github.com/luksrocha/house-system/internal/domain/repositories"
 )
 
 type DeleteHouseHandler struct {
@@ -18,26 +18,25 @@ func NewDeleteHouseHandler(repository repositories.HouseRepository) *DeleteHouse
 	}
 }
 
-func (d *DeleteHouseHandler) DeleteHouseHandler() func(response http.ResponseWriter, request *http.Request) {
-	return func(response http.ResponseWriter, request *http.Request) {
-		id := request.URL.Query().Get("id")
+func (d *DeleteHouseHandler) DeleteHouseHandler(response http.ResponseWriter, request *http.Request) {
 
-		fmt.Println(id)
+	id := request.URL.Query().Get("id")
 
-		if id == "" {
-			response.WriteHeader(http.StatusBadRequest)
-			return
-		}
+	fmt.Println(id)
 
-		deleteHouseUseCase := useCase.NewDeleteHouseUseCase(d.repository)
-
-		if err := deleteHouseUseCase.Exec(id); err != nil {
-			response.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		response.WriteHeader(http.StatusOK)
-		response.Write([]byte("House deleted successfully"))
-
+	if id == "" {
+		response.WriteHeader(http.StatusBadRequest)
+		return
 	}
+
+	deleteHouseUseCase := useCase.NewDeleteHouseUseCase(d.repository)
+
+	if err := deleteHouseUseCase.Exec(id); err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+	response.Write([]byte("House deleted successfully"))
+
 }

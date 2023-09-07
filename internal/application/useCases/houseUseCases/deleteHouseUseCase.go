@@ -1,6 +1,6 @@
 package useCase
 
-import "github.com/luksrocha/house-system/internal/application/repositories"
+import "github.com/luksrocha/house-system/internal/domain/repositories"
 
 type DeleteHouseUseCase struct {
 	houseRepository repositories.HouseRepository

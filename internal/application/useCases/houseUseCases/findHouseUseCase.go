@@ -1,8 +1,8 @@
 package useCase
 
 import (
-	"github.com/luksrocha/house-system/internal/application/repositories"
-	"github.com/luksrocha/house-system/internal/domain"
+	"github.com/luksrocha/house-system/internal/domain/entities"
+	"github.com/luksrocha/house-system/internal/domain/repositories"
 )
 
 type FindHouseUseCase struct {
@@ -15,7 +15,7 @@ func NewFindHouseUseCase(repo repositories.HouseRepository) *FindHouseUseCase {
 	}
 }
 
-func (f *FindHouseUseCase) Exec(id string) (*domain.House, error) {
+func (f *FindHouseUseCase) Exec(id string) (*entities.House, error) {
 	house, err := f.houseRepository.Find(id)
 
 	if err != nil {

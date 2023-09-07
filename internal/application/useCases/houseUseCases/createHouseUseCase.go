@@ -1,8 +1,8 @@
 package useCase
 
 import (
-	"github.com/luksrocha/house-system/internal/application/repositories"
-	"github.com/luksrocha/house-system/internal/domain"
+	"github.com/luksrocha/house-system/internal/domain/entities"
+	"github.com/luksrocha/house-system/internal/domain/repositories"
 )
 
 type CreateHouseUseCase struct {
@@ -15,7 +15,7 @@ func NewCreateHouseUseCase(houseRepository repositories.HouseRepository) *Create
 	}
 }
 
-func (useCase *CreateHouseUseCase) Execute(house *domain.House) error {
+func (useCase *CreateHouseUseCase) Execute(house *entities.House) error {
 
 	err := useCase.houseRepository.Insert(house)
 
