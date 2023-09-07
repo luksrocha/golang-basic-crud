@@ -6,7 +6,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/luksrocha/house-system/database"
 	"github.com/luksrocha/house-system/internal/application/repositories"
-	"github.com/luksrocha/house-system/internal/infra/handlers"
+	handlers "github.com/luksrocha/house-system/internal/infra/handlers/houseHandlers"
 )
 
 func main() {
@@ -22,8 +22,10 @@ func main() {
 	houseRepository := repositories.NewHouseRepositoryPostgres(db)
 
 	createHouseHandler := handlers.NewHouseHandler(&houseRepository)
+	deleteHouseHandler := handlers.NewDeleteHouseHandler(&houseRepository)
 
-	http.HandleFunc("/teste", createHouseHandler.CreateHouseHandler())
+	http.HandleFunc("/createHouse", createHouseHandler.CreateHouseHandler())
+	http.HandleFunc("/deleteHouse", deleteHouseHandler.DeleteHouseHandler())
 
 	http.ListenAndServe(":8090", nil)
 
