@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/luksrocha/house-system/internal/domain/repositories"
 	"github.com/luksrocha/house-system/internal/infra/database"
 	handlers "github.com/luksrocha/house-system/internal/infra/handlers/houseHandlers"
@@ -18,16 +19,18 @@ func main() {
 
 	defer db.Close()
 
+	mux := mux.NewRouter()
+
 	houseRepository := repositories.NewHouseRepositoryPostgres(db)
 
-	createHouseHandler := handlers.NewHouseHandler(&houseRepository)
-	deleteHouseHandler := handlers.NewDeleteHouseHandler(&houseRepository)
-	findHouseHandler := handlers.NewFindHouseHandler(&houseRepository)
+	houseHandler := handlers.NewHouseHandler(&houseRepository)
 
-	http.HandleFunc("/createHouse", createHouseHandler.CreateHouseHandler)
-	http.HandleFunc("/deleteHouse", deleteHouseHandler.DeleteHouseHandler)
-	http.HandleFunc("/findHouse", findHouseHandler.FindHouseHandler)
+	houseHandler.RegisterHandlers(mux)
 
-	http.ListenAndServe(":8090", nil)
+	srv := http.NewServeMux()
+
+	srv.Handle("/", mux)
+
+	http.ListenAndServe(":8090", mux)
 
 }

@@ -10,17 +10,17 @@ import (
 	"github.com/luksrocha/house-system/internal/infra/dto"
 )
 
-type HouseHandler struct {
+type CreateHouseHandler struct {
 	HouseDB repositories.HouseRepository
 }
 
-func NewHouseHandler(db repositories.HouseRepository) *HouseHandler {
-	return &HouseHandler{
+func NewCreateHouseHandler(db repositories.HouseRepository) *CreateHouseHandler {
+	return &CreateHouseHandler{
 		HouseDB: db,
 	}
 }
 
-func (h *HouseHandler) CreateHouseHandler(response http.ResponseWriter, request *http.Request) {
+func (h *CreateHouseHandler) CreateHouseHandler(response http.ResponseWriter, request *http.Request) {
 
 	var house dto.CreateHouseDTOInput
 

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	useCase "github.com/luksrocha/house-system/internal/application/useCases/houseUseCases"
 	"github.com/luksrocha/house-system/internal/domain/repositories"
 )
@@ -19,7 +20,14 @@ func NewFindHouseHandler(repo repositories.HouseRepository) *FindHouseHandler {
 }
 
 func (f *FindHouseHandler) FindHouseHandler(response http.ResponseWriter, request *http.Request) {
-	id := request.URL.Query().Get("id")
+	vars := mux.Vars(request)
+
+	id, ok := vars["id"]
+
+	if !ok {
+		response.Write([]byte("Missing id parameter"))
+		return
+	}
 
 	findHouseUseCase := useCase.NewFindHouseUseCase(f.repo)
 
