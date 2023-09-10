@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/luksrocha/house-system/internal/domain/repositories"
@@ -19,18 +21,34 @@ func main() {
 
 	defer db.Close()
 
-	mux := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 
 	houseRepository := repositories.NewHouseRepositoryPostgres(db)
 
 	houseHandler := handlers.NewHouseHandler(&houseRepository)
+	houseHandler.RegisterHandlers(router)
 
-	houseHandler.RegisterHandlers(mux)
+	srv := &http.Server{
+		Addr: ":8090",
+		// Good practice to set timeouts to avoid Slowloris attacks.
+		WriteTimeout: time.Second * 15,
+		ReadTimeout:  time.Second * 15,
+		IdleTimeout:  time.Second * 60,
+		Handler:      router, // Pass our instance of gorilla/mux in.
+	}
 
-	srv := http.NewServeMux()
+	fmt.Println("Routes:")
+	router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		t, err := route.GetPathTemplate()
+		if err != nil {
+			return err
+		}
+		fmt.Println(t)
+		return nil
+	})
 
-	srv.Handle("/", mux)
-
-	http.ListenAndServe(":8090", mux)
+	if err := srv.ListenAndServe(); err != nil {
+		fmt.Println(err)
+	}
 
 }

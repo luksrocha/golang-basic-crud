@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/luksrocha/house-system/internal/domain/entities"
 )
@@ -65,18 +68,20 @@ func (houseRepository *HouseRepositoryPostgres) Find(id string) (*entities.House
 
 }
 
-func (HouseRepository *HouseRepositoryPostgres) Update(house *entities.House) error {
+func (HouseRepository *HouseRepositoryPostgres) Update(house *entities.House) (*entities.House, error) {
 	prepare, err := HouseRepository.DB.Prepare("UPDATE houses SET name = $1, address = $2, updated_at = $3 WHERE id = $4")
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = prepare.Exec(house.Name, house.Address, house.UpdatedAt, house.ID)
+	houseUpdated, err := prepare.Exec(house.Name, house.Address, time.Now(), house.ID)
+
+	fmt.Println(houseUpdated)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return house, nil
 }

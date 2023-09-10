@@ -19,9 +19,13 @@ func (h *HouseHandler) RegisterHandlers(router *mux.Router) {
 	createHouseHandler := NewCreateHouseHandler(h.repo)
 	deleteHouseHandler := NewDeleteHouseHandler(h.repo)
 	findHouseHandler := NewFindHouseHandler(h.repo)
+	updateHouseHandler := NewUpdateHouseHandler(h.repo)
 
-	router.HandleFunc("/house/{id}", findHouseHandler.FindHouseHandler).Methods("GET")
-	router.HandleFunc("/house", createHouseHandler.CreateHouseHandler).Methods("POST")
-	router.HandleFunc("/house/{id}", deleteHouseHandler.DeleteHouseHandler).Methods("DELETE")
+	r := router.PathPrefix("/house").Subrouter()
+
+	r.HandleFunc("", createHouseHandler.CreateHouseHandler).Methods("POST")
+	r.HandleFunc("/{id}", deleteHouseHandler.DeleteHouseHandler).Methods("DELETE")
+	r.HandleFunc("/{id}", findHouseHandler.FindHouseHandler).Methods("GET")
+	r.HandleFunc("/{id}", updateHouseHandler.Handle).Methods("PUT")
 
 }
