@@ -8,6 +8,7 @@ import (
 	"github.com/luksrocha/house-system/internal/domain/repositories"
 	"github.com/luksrocha/house-system/internal/infra/database"
 	handlers "github.com/luksrocha/house-system/internal/infra/handlers/houseHandlers"
+	"github.com/luksrocha/house-system/internal/infra/handlers/userHandlers"
 )
 
 func main() {
@@ -26,6 +27,11 @@ func main() {
 
 	houseHandler := handlers.NewHouseHandler(&houseRepository)
 	houseHandler.RegisterHandlers(router)
+
+	userRepository := repositories.NewUserRepositoryPostgres(db)
+
+	userHandler := userHandlers.NewUserHandler(userRepository)
+	userHandler.RegisterHandler(router)
 
 	srv := &http.Server{
 		Addr: ":8090",
