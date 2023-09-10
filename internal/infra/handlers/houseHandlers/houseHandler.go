@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/luksrocha/house-system/internal/domain/repositories"
 )
@@ -23,9 +25,9 @@ func (h *HouseHandler) RegisterHandlers(router *mux.Router) {
 
 	r := router.PathPrefix("/house").Subrouter()
 
-	r.HandleFunc("", createHouseHandler.CreateHouseHandler).Methods("POST")
-	r.HandleFunc("/{id}", deleteHouseHandler.DeleteHouseHandler).Methods("DELETE")
-	r.HandleFunc("/{id}", findHouseHandler.FindHouseHandler).Methods("GET")
-	r.HandleFunc("/{id}", updateHouseHandler.Handle).Methods("PUT")
+	r.HandleFunc("", createHouseHandler.CreateHouseHandler).Methods(http.MethodPost)
+	r.HandleFunc("/{id}", deleteHouseHandler.DeleteHouseHandler).Methods(http.MethodDelete)
+	r.HandleFunc("/{id}", findHouseHandler.FindHouseHandler).Methods(http.MethodGet)
+	r.HandleFunc("/{id}", updateHouseHandler.Handle).Methods(http.MethodPut)
 
 }
