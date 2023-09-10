@@ -37,16 +37,6 @@ func main() {
 		Handler:      router, // Pass our instance of gorilla/mux in.
 	}
 
-	fmt.Println("Routes:")
-	router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
-		t, err := route.GetPathTemplate()
-		if err != nil {
-			return err
-		}
-		fmt.Println(t)
-		return nil
-	})
-
 	if err := srv.ListenAndServe(); err != nil {
 		fmt.Println(err)
 	}
