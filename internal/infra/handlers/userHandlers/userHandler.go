@@ -17,9 +17,11 @@ func NewUserHandler(repo repositories.UserRepository) *UserHandler {
 
 func (u *UserHandler) RegisterHandler(router *mux.Router) {
 	createUserHandler := NewCreateUserHandler(u.repo)
+	loginUserHandler := NewLoginUserHandler(u.repo)
 
 	r := router.PathPrefix("/user").Subrouter()
 
 	r.HandleFunc("", createUserHandler.Execute).Methods(http.MethodPost)
+	r.HandleFunc("/login", loginUserHandler.Execute).Methods(http.MethodPost)
 
 }
