@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,17 +10,25 @@ import (
 	"github.com/luksrocha/house-system/internal/infra/database"
 	handlers "github.com/luksrocha/house-system/internal/infra/handlers/houseHandlers"
 	"github.com/luksrocha/house-system/internal/infra/handlers/userHandlers"
+	"github.com/luksrocha/house-system/util"
 )
 
 func main() {
+	config, err := util.LoadConfig("../../")
 
-	db, err := database.OpenConnection()
+	if err != nil {
+		panic(err)
+	}
+
+	db, err := database.OpenConnection(config.DBDriver, config.DBHost, config.DBUser, config.DBPassword, config.DBName)
 
 	if err != nil {
 		panic(err)
 	}
 
 	defer db.Close()
+
+	fmt.Println("JWT SECRET: ", config.JWTSecretKey)
 
 	router := mux.NewRouter().StrictSlash(true)
 
