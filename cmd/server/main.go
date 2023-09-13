@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -27,8 +26,6 @@ func main() {
 	}
 
 	defer db.Close()
-
-	fmt.Println("JWT SECRET: ", config.JWTSecretKey)
 
 	router := mux.NewRouter().StrictSlash(true)
 

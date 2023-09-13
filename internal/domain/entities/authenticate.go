@@ -5,10 +5,12 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/luksrocha/house-system/constants"
+	"github.com/spf13/viper"
 )
 
 var (
-	JWT_SECRET_KEY           = "dfbhj1b23j1bjkfds321b;./a123;l321"
+	JWT_SECRET_KEY           = viper.GetString(constants.EnvKeyConstants().JWTSecretKey)
 	EXPIRATION_TIME_ONE_WEEK = time.Hour * 24 * 7
 )
 
