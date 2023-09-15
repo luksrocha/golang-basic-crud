@@ -2,10 +2,12 @@ package entities
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/luksrocha/house-system/constants"
+	"github.com/luksrocha/house-system/util"
 	"github.com/spf13/viper"
 )
 
@@ -17,12 +19,7 @@ var (
 func (u *User) GenerateToken() (string, error) {
 	secret := JWT_SECRET_KEY
 
-	claims := jwt.MapClaims{
-		"userId":   u.ID,
-		"username": u.GetFullName(),
-		"email":    u.Email,
-		"exp":      time.Now().Add(EXPIRATION_TIME_ONE_WEEK).Unix(),
-	}
+	claims := util.NewClaims(time.Now().Add(EXPIRATION_TIME_ONE_WEEK).Unix(), u.ID.String(), u.GetFullName(), u.Email)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
@@ -31,6 +28,12 @@ func (u *User) GenerateToken() (string, error) {
 	if err != nil {
 		return "", errors.New("error while signing the token")
 	}
+
+	teste, _ := jwt.ParseWithClaims(tokenString, jwt.MapClaims{}, func(token *jwt.Token) (any, error) {
+		return token, nil
+	})
+
+	fmt.Println(teste.Claims)
 
 	return tokenString, nil
 }
