@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -13,7 +14,7 @@ import (
 )
 
 func main() {
-	config, err := util.LoadConfig("../../")
+	config, err := util.LoadConfig(".")
 
 	if err != nil {
 		panic(err)
@@ -22,6 +23,7 @@ func main() {
 	db, err := database.OpenConnection(config.DBDriver, config.DBHost, config.DBUser, config.DBPassword, config.DBName)
 
 	if err != nil {
+		fmt.Println("Error")
 		panic(err)
 	}
 
@@ -49,6 +51,7 @@ func main() {
 	}
 
 	if err := srv.ListenAndServe(); err != nil {
+		fmt.Println("error on lintenandserve")
 		panic(err)
 	}
 

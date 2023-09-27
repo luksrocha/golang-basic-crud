@@ -5,6 +5,7 @@ import (
 
 	"github.com/luksrocha/house-system/internal/domain/entities"
 	"github.com/luksrocha/house-system/internal/domain/repositories"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type CreateUserUseCase struct {
@@ -23,6 +24,10 @@ func (c *CreateUserUseCase) Execute(user *entities.User) error {
 	if err == nil {
 		return errors.New("user already exists")
 	}
+
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.HashedPassword), 8)
+
+	user.HashedPassword = string(hashedPassword)
 
 	err = c.repo.Insert(user)
 
